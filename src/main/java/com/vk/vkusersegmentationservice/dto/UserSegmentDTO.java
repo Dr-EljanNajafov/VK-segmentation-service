@@ -10,6 +10,6 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserSegmentDTO {
-    private Long userId;
-    private Long segmentId;
+    private String userEmail;
+    private String segmentName;
 }

@@ -35,14 +35,14 @@ public class UserSegmentService {
      * @throws ResponseStatusException если пользователь или сегмент не найдены.
      */
 
-    public UserSegment assignUserToSegment(Long userId, Long segmentId) {
-        Optional<User> userOptional = userRepository.findById(userId);
+    public UserSegment assignUserToSegment(String userEmail, String segmentName) {
+        Optional<User> userOptional = userRepository.findByEmail(userEmail);
         if (userOptional.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
         User user = userOptional.get();
 
-        Optional<Segment> segmentOptional = segmentRepository.findById(segmentId);
+        Optional<Segment> segmentOptional = segmentRepository.findByName(segmentName);
         if (segmentOptional.isEmpty()) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Segment not found");
         }
