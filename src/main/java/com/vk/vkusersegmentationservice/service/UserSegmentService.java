@@ -12,7 +12,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.Random;
 
 @Service
 public class UserSegmentService {
@@ -25,15 +27,6 @@ public class UserSegmentService {
 
     @Autowired
     private SegmentRepository segmentRepository;
-
-    /**
-     * Назначение пользователя на сегмент.
-     * Проверяем существование пользователя и сегмента в базе данных перед созданием связи.
-     * @param userId Идентификатор пользователя.
-     * @param segmentId Идентификатор сегмента.
-     * @return Сохраненная связь между пользователем и сегментом.
-     * @throws ResponseStatusException если пользователь или сегмент не найдены.
-     */
 
     public UserSegment assignUserToSegment(String userEmail, String segmentName) {
         Optional<User> userOptional = userRepository.findByEmail(userEmail);
@@ -54,5 +47,28 @@ public class UserSegmentService {
         userSegment.setAssignedAt(LocalDateTime.now());
 
         return userSegmentRepository.save(userSegment);
+    }
+
+    // Назначение сегмента случайным образом определённому проценту пользователей
+    public void assignSegmentToRandomUsers(Long segmentId, double percentage) {
+        Segment segment = segmentRepository.findById(segmentId)
+                .orElseThrow(() -> new RuntimeException("Segment not found"));
+
+        List<User> allUsers = userRepository.findAll();
+        int userCount = allUsers.size();
+        int usersToAssign = (int) (userCount * percentage);
+
+        Random random = new Random();
+
+        // Выбираем случайных пользователей
+        for (int i = 0; i < usersToAssign; i++) {
+            User user = allUsers.get(random.nextInt(userCount));
+            UserSegment userSegment = new UserSegment(null, user, segment, null);
+            userSegmentRepository.save(userSegment);
+        }
+    }
+
+    public List<Segment> getSegmentsByUserId(Long userId) {
+        return userSegmentRepository.findSegmentsByUserId(userId);
     }
 }

@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
 @Entity
+@Table(name = "users")
 @Setter
 @Getter
 @NoArgsConstructor
@@ -27,6 +28,6 @@ public class User {
     @NotBlank(message = "Email cannot be blank")
     private String email;
 
-    @Column(name = "created_at", nullable = false, updatable = false)
+    @Column(name = "created_at", updatable = false)
     private LocalDateTime createdAt;
 }
