@@ -1,0 +1,4 @@
+package com.vk.vkusersegmentationservice.exceptionhandling;
+
+public class CustomAccessDeniedHandler {
+}
