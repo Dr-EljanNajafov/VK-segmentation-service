@@ -22,17 +22,24 @@ public class UserService {
         return userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
     }
 
-    @Transactional
+    @Transactional(rollbackOn = Exception.class)
     public User createUser(User user) {
-        return userRepository.save(user);
+        try {
+            return userRepository.save(user);
+        } catch (Exception e) {
+            // Пробрасываем исключение, чтобы откатить транзакцию
+            throw new RuntimeException("Error creating user", e);
+        }
     }
 
+    @Transactional
     public User updateUser(Long id, User userDetails) {
         User user = getUserById(id);
         user.setEmail(userDetails.getEmail());
         return userRepository.save(user);
     }
 
+    @Transactional
     public void deleteUser(Long id) {
         User user = getUserById(id);
         userRepository.delete(user);

@@ -6,6 +6,7 @@ import com.vk.vkusersegmentationservice.model.UserSegment;
 import com.vk.vkusersegmentationservice.repository.SegmentRepository;
 import com.vk.vkusersegmentationservice.repository.UserRepository;
 import com.vk.vkusersegmentationservice.repository.UserSegmentRepository;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -28,6 +29,7 @@ public class UserSegmentService {
     @Autowired
     private SegmentRepository segmentRepository;
 
+    @Transactional
     public UserSegment assignUserToSegment(String userEmail, String segmentName) {
         Optional<User> userOptional = userRepository.findByEmail(userEmail);
         if (userOptional.isEmpty()) {
@@ -49,6 +51,7 @@ public class UserSegmentService {
         return userSegmentRepository.save(userSegment);
     }
 
+    @Transactional
     // Назначение сегмента случайным образом определённому проценту пользователей
     public void assignSegmentToRandomUsers(Long segmentId, double percentage) {
         Segment segment = segmentRepository.findById(segmentId)
