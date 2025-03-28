@@ -5,6 +5,7 @@ import com.vk.vkusersegmentationservice.model.Segment;
 import com.vk.vkusersegmentationservice.service.SegmentService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,18 +30,21 @@ public class SegmentController {
         return ResponseEntity.ok(new SegmentDTO(segment.getId(), segment.getName(), segment.getDescription()));
     }
     @PostMapping
+    @PostAuthorize("hasRole('ADMIN')")
     public ResponseEntity<SegmentDTO> createSegment(@RequestBody Segment segment) {
         Segment savedSegment = segmentService.createSegment(segment);
         return ResponseEntity.ok(new SegmentDTO(savedSegment.getId(), savedSegment.getName(), savedSegment.getDescription()));
     }
 
     @PutMapping("/{id}")
+    @PostAuthorize("hasRole('ADMIN')")
     public ResponseEntity<SegmentDTO> updateSegment(@PathVariable Long id, @RequestBody SegmentDTO segmentDTO) {
         Segment segment = segmentService.updateSegment(id, segmentDTO.getName(), segmentDTO.getDescription());
         return ResponseEntity.ok(new SegmentDTO(segment.getId(), segment.getName(), segment.getDescription()));
     }
 
     @DeleteMapping("/{id}")
+    @PostAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteSegment(@PathVariable Long id) {
         segmentService.deleteSegment(id);
         return ResponseEntity.noContent().build();

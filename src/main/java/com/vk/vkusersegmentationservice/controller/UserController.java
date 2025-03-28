@@ -5,6 +5,7 @@ import com.vk.vkusersegmentationservice.model.User;
 import com.vk.vkusersegmentationservice.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PostAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -32,6 +33,7 @@ public class UserController {
 
 
     @PostMapping
+    @PostAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDTO> createUser(@RequestBody User user) {
         user.setCreatedAt(LocalDateTime.now());
         User savedUser = userService.createUser(user);
@@ -39,12 +41,14 @@ public class UserController {
     }
 
     @PutMapping("/{id}")
+    @PostAuthorize("hasRole('ADMIN')")
     public ResponseEntity<UserDTO> updateUser(@PathVariable Long id, @RequestBody User userDetails) {
         User user = userService.updateUser(id, userDetails);
         return ResponseEntity.ok(new UserDTO(user.getId(), user.getEmail()));
     }
 
     @DeleteMapping("/{id}")
+    @PostAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
         userService.deleteUser(id);
         return ResponseEntity.noContent().build();
