@@ -1,0 +1,4 @@
+package com.vk.vkusersegmentationservice.filter;
+
+public class CsrfCookieFilter {
+}
