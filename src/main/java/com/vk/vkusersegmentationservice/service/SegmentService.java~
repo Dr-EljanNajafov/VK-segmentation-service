@@ -2,7 +2,6 @@ package com.vk.vkusersegmentationservice.service;
 
 import com.vk.vkusersegmentationservice.model.Segment;
 import com.vk.vkusersegmentationservice.repository.SegmentRepository;
-import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -23,12 +22,10 @@ public class SegmentService {
         return segmentRepository.findById(id).orElseThrow(() -> new RuntimeException("Segment not found"));
     }
 
-    @Transactional
     public Segment createSegment(Segment segment) {
         return segmentRepository.save(segment);
     }
 
-    @Transactional
     public Segment updateSegment(Long id, String name, String description) {
         Optional<Segment> segmentOptional = segmentRepository.findById(id);
         if (segmentOptional.isPresent()) {
@@ -40,7 +37,6 @@ public class SegmentService {
         throw new RuntimeException("Segment not found");
     }
 
-    @Transactional
     public void deleteSegment(Long id) {
         segmentRepository.deleteById(id);
     }
