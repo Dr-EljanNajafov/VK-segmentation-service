@@ -32,6 +32,11 @@ public class JWTTokenValidatorFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
             throws ServletException, IOException {
         String jwt = request.getHeader(ApplicationConstants.JWT_HEADER);
+
+        if (jwt != null && jwt.startsWith("Bearer ")) {
+            jwt = jwt.substring(7); // Убираем "Bearer "
+        }
+
         if(null != jwt) {
             try {
                 Environment env = getEnvironment();
